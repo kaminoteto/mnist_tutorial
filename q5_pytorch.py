@@ -8,8 +8,6 @@ from torch.autograd import Variable
 from tqdm import tqdm
 import time
 
-
-
 BATCH_SIZE = 128
 NUM_EPOCHS = 10
 learning_rate = 0.02
@@ -82,8 +80,9 @@ for data in train_loader:
 
 # 模型评估
 model.eval()
-eval_loss = 0
-eval_acc = 0
+eval_loss = eval_loss1 = 0
+eval_acc = eval_acc1 = 0
+
 for data in test_loader:
     img, label = data
     img = img.view(img.size(0), -1)
@@ -97,8 +96,26 @@ for data in test_loader:
     _, pred = torch.max(out, 1)
     num_correct = (pred == label).sum()
     eval_acc += num_correct.item()
+for data in train_loader:
+    img, label = data
+    img = img.view(img.size(0), -1)
+    if torch.cuda.is_available():
+        img = img.cuda()
+        label = label.cuda()
+
+    out = model(img)
+    loss = criterion(out, label)
+    eval_loss1 += loss.data.item() * label.size(0)
+    _, pred = torch.max(out, 1)
+    num_correct = (pred == label).sum()
+    eval_acc1 += num_correct.item()
 print('Test Loss: {:.6f}, Acc: {:.6f}'.format(
     eval_loss / (len(test_dataset)),
     eval_acc / (len(test_dataset))
 ))
+print('Train Loss: {:.6f}, Acc: {:.6f}'.format(
+    eval_loss1 / (len(train_dataset)),
+    eval_acc1 / (len(train_dataset))
+))
+
 
