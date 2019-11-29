@@ -22,7 +22,6 @@ print(Y_train.size,Y_test.size)
 
 lr = LinearSVC(C=0.5, max_iter =500,loss='hinge') # support vector machine模型
 lr.fit(X_train, Y_train)        # 根据数据[x,y]，计算回归参数
-print ('Learning of SVM_Alter is OK...')
 
 train_accuracy = lr.score(X_train, Y_train)
 test_accuracy = lr.score(X_test, Y_test)
