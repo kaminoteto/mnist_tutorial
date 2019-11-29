@@ -19,7 +19,6 @@ targets = mnist.target
 X = mnist.data / 255.
 Y = mnist.target
 X_train, X_test, Y_train, Y_test = train_test_split(X[::10], Y[::10], test_size=1000)
-print(Y_train.size,Y_test.size)
 
 lr = LogisticRegression()   # Logistic回归模型
 lr.fit(X_train, Y_train)        # 根据数据[x,y]，计算回归参数
